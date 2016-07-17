@@ -13,10 +13,14 @@ And then install Ansible with:
 
 `$ sudo pip install ansible`
 
-If you have different OS, please look http://docs.ansible.com/ansible/intro_installation.html
+Install Python PassLib library to use password hash:
+
+`$ sudo pip install passlib`
+
+If you have different OS, please look at http://docs.ansible.com/ansible/intro_installation.html
 
 ## Pitfalls
 
 To get rid of **AttributeError: 'EntryPoint' object has no attribute 'resolve'** use:
 
-`pip install cryptography==1.2.1`
+`$ pip install cryptography==1.2.1`
