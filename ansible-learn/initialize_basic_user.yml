@@ -1,0 +1,21 @@
+---
+- hosts: server
+  remote_user: root
+  vars:
+    NORMAL_USER_NAME: 'deploy'
+  gather_facts: no
+  pre_tasks:
+    - name: 'install python 2'
+      raw: sudo apt-get -y install python-simplejson
+  tasks:
+    - name: "Create a secondary, non-root user"
+      user: name={{ NORMAL_USER_NAME }}
+            password='$6$rounds=656000$a9VCVbQi5xAHQtpw$.LYckYPSO42ebZkX9V9JMJfmoiKoZJs754GVnq3lmrFT/BbG08ILD.eJ0GAG.mauH2TcW3Hfj1kJb4Jx9r.8N0'
+            shell=/bin/bash
+    - name: Add remote authorized key to allow future passwordless logins
+      authorized_key: user={{ NORMAL_USER_NAME }} key="{{ lookup('file', '/Users/sergeimatros/.ssh/php7/id_rsa.pub') }}"
+    - name: Add normal user to sudoers
+      lineinfile: dest=/etc/sudoers
+                  regexp="{{ NORMAL_USER_NAME }} ALL"
+                  line="{{ NORMAL_USER_NAME }} ALL=(ALL) NOPASSWD:ALL"
+                  state=present
